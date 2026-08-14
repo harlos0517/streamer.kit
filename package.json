@@ -1,0 +1,28 @@
+{
+  "name": "streamer-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted, cross-platform streaming interaction system built on Streamer.bot",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.5.1",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "@harlos/eslint-config": "^0.1.0",
+    "@harlos/tsconfig": "^0.1.0",
+    "@types/node": "^26.2.0",
+    "eslint": "^10.8.1",
+    "jiti": "^2.7.0",
+    "typescript": "^6.0.3"
+  }
+}

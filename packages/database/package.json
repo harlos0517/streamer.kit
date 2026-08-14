@@ -1,0 +1,10 @@
+{
+  "name": "@streamer-kit/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "prisma": "^7.9.1"
+  }
+}
