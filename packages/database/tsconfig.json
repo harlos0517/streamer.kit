@@ -8,10 +8,13 @@
     }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "prisma/**/*.ts",
+    "prisma.config.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "src/generated"
   ]
 }
