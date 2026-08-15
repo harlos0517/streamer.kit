@@ -5,7 +5,7 @@ dist/
 
 .vscode/
 
-.env
-.env.production
+.env*
+!.env.example
 
 **/generated
