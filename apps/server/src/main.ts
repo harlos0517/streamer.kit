@@ -1,9 +1,10 @@
 import './env.ts'
 
 import type { PayloadBase, TwitchChatMessageEventData } from '@/types/eventData.ts'
+import { addCurrency } from './currency/addCurrency.ts'
 import type { ChatMessageEvent } from './events/normalize.ts'
 import { normalizeTwitchChatMessage } from './events/normalize.ts'
-import { addCurrency } from './currency/addCurrency.ts'
+import { createHttpServer } from './http/server.ts'
 import { createStreamerbotClient } from './streamerbot/client.ts'
 import { resolveViewer } from './viewers/resolve.ts'
 
@@ -36,3 +37,13 @@ client.on('Twitch.ChatMessage', payload => {
 // client.on('YouTube.Message', payload => {
 //   handleChatMessage(normalizeYouTubeMessage(payload))
 // })
+
+const httpApp = createHttpServer()
+const httpPort = Number(process.env.HTTP_PORT ?? 3000)
+
+httpApp
+  .listen({ port: httpPort, host: '0.0.0.0' })
+  .catch(error => {
+    httpApp.log.error(error, 'Failed to start HTTP server')
+    process.exit(1)
+  })
