@@ -5,6 +5,8 @@
   "type": "module",
   "main": "src/index.ts",
   "dependencies": {
-    "@streamer-kit/shared": "workspace:*"
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@streamer-kit/shared": "workspace:*",
+    "drizzle-orm": "^0.45.2"
   }
 }
