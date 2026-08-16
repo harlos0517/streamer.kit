@@ -352,15 +352,15 @@ Streamer.bot Adapter
 Streamer.bot 原始事件統一使用 namespace：
 
 ```text
-raw.streamerbot.*
+streamerbot.*
 ```
 
 例如：
 
 ```text
-raw.streamerbot.twitch.chatMessage
-raw.streamerbot.youtube.message
-raw.streamerbot.obs.sceneChanged
+streamerbot.twitch.chatMessage
+streamerbot.youtube.message
+streamerbot.obs.sceneChanged
 ```
 
 Raw Event：

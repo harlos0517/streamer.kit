@@ -70,7 +70,7 @@ export function registerNormalizers(bus: EventBus<CoreEventMap>): void {
     bus.emit('chat.message', normalizeTwitchChatMessage(payload))
   })
 
-  // bus.on('raw.streamerbot.youtube.message', payload => {
+  // bus.on('streamerbot.youtube.message', payload => {
   //   bus.emit('chat.message', normalizeYouTubeMessage(payload))
   // })
 }

@@ -7,7 +7,7 @@ import { createStreamerbotClient } from './client.ts'
 const RAW_EVENT_PREFIX = 'streamerbot.'
 
 // Our bus namespace -> Streamer.bot's own "Source.Type" event string.
-// Only events listed here can ever be forwarded; unmapped raw.streamerbot.*
+// Only events listed here can ever be forwarded; unmapped streamerbot.*
 // subscriptions are silently ignored (nothing to subscribe to yet).
 const RAW_EVENT_MAP: Record<string, StreamerbotEventName> = {
   'twitch.chatMessage': 'Twitch.ChatMessage',
