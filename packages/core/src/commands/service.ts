@@ -1,28 +1,15 @@
+import type { ChatMessageEvent, CommandTargetEventPayload } from '@streamer-kit/shared'
+
 import type { EventBus } from '../events/bus.ts'
 import type { CoreEventMap } from '../events/coreEventMap.ts'
-import type { ChatMessageEvent } from '../events/normalize.ts'
 
 export interface CommandDefinition {
   id: string
   trigger: string
-  aliases?: string[]
+  aliases?: string[] | undefined
   targetEvent: string
   enabled?: boolean
   cooldownMs?: number
-}
-
-export interface CommandTriggeredEvent {
-  commandId: string
-  chatEvent: ChatMessageEvent
-  args: string[]
-}
-
-// Shape of the payload emitted on a command's own targetEvent. Not part of
-// CoreEventMap since targetEvent is a runtime string, not a literal key -
-// consumers cast to this explicitly (see apps/server/src/main.ts).
-export interface CommandTargetEventPayload {
-  chatEvent: ChatMessageEvent
-  args: string[]
 }
 
 export class CommandsService {

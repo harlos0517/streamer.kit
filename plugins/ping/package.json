@@ -1,0 +1,10 @@
+{
+  "name": "@streamer-kit/plugin-ping",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@streamer-kit/plugin-sdk": "workspace:*"
+  }
+}

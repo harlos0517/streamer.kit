@@ -1,18 +1,8 @@
+import type { ChatMessageEvent } from '@streamer-kit/shared'
+
 import type { PayloadBase, TwitchChatMessageEventData } from '../types/eventData.ts'
 import type { EventBus } from './bus.ts'
 import type { CoreEventMap } from './coreEventMap.ts'
-
-export type Platform = 'twitch' // | 'youtube'
-
-export type ChatMessageEvent = {
-  type: 'chat.message'
-  platform: Platform
-  platformUserId: string
-  platformDisplayName: string
-  message: string
-  timestamp: string
-  raw: unknown
-}
 
 // Streamer.bot doesn't publish a schema for YouTube.Message yet; shape taken
 // from the client library's source (youtube.types.ts), unverified against a live instance.

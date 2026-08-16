@@ -1,6 +1,6 @@
+import type { ChatMessageEvent } from '@streamer-kit/shared'
 import { and, eq } from 'drizzle-orm'
 
-import type { ChatMessageEvent } from '../events/normalize.ts'
 import { db } from '../persistence/client.ts'
 import type { Identity, Viewer } from '../persistence/schema.ts'
 import { identities, viewers } from '../persistence/schema.ts'

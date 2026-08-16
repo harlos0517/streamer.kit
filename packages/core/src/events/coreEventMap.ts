@@ -1,6 +1,6 @@
-import type { CommandTriggeredEvent } from '../commands/service.ts'
+import type { ChatMessageEvent, CommandTriggeredEvent } from '@streamer-kit/shared'
+
 import type { PayloadBase, TwitchChatMessageEventData } from '../types/eventData.ts'
-import type { ChatMessageEvent } from './normalize.ts'
 
 // Events Core itself owns/emits. Plugin-defined events (e.g. a command's
 // targetEvent) aren't known here - they fall back to EventBus's untyped

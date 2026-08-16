@@ -256,6 +256,9 @@ importers:
       '@streamer-kit/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@streamer-kit/plugin-ping':
+        specifier: workspace:*
+        version: link:../../plugins/ping
       dotenv:
         specifier: ^17.2.3
         version: 17.4.2
@@ -275,6 +278,12 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.3.1
+      '@streamer-kit/plugin-sdk':
+        specifier: workspace:*
+        version: link:../plugin-sdk
+      '@streamer-kit/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@streamerbot/client':
         specifier: ^2.0.1
         version: 2.0.1
@@ -297,6 +306,20 @@ importers:
       tsx:
         specifier: ^4.20.6
         version: 4.23.12
+
+  packages/plugin-sdk:
+    dependencies:
+      '@streamer-kit/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/shared: {}
+
+  plugins/ping:
+    dependencies:
+      '@streamer-kit/plugin-sdk':
+        specifier: workspace:*
+        version: link:../../packages/plugin-sdk
 
 packages:
 
