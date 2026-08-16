@@ -1,6 +1,6 @@
 import { StreamerbotClient } from '@streamerbot/client'
 
-export function createStreamerbotClient() {
+export const createStreamerbotClient = () => {
   const password = process.env.STREAMERBOT_WS_PASSWORD
 
   return new StreamerbotClient({

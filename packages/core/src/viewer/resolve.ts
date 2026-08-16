@@ -9,7 +9,7 @@ const platformMap: Record<ChatMessageEvent['platform'], Identity['platform']> = 
   twitch: 'twitch',
 }
 
-export async function resolveViewer(event: ChatMessageEvent): Promise<Viewer> {
+export const resolveViewer = async(event: ChatMessageEvent): Promise<Viewer> => {
   const platform = platformMap[event.platform]
   const lastMessageAt = new Date(event.timestamp)
 
