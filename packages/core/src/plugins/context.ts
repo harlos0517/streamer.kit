@@ -3,6 +3,7 @@ import { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
 
 import type { Runtime } from '../runtime/runtime.ts'
 import { createLogger } from './logger.ts'
+import { createPluginStorage } from './storage.ts'
 
 export const createPluginContext = (
   manifest: PluginManifest,
@@ -54,6 +55,9 @@ export const createPluginContext = (
     template: {
       render: (template, data) => runtime.template.render(template, data),
     },
+    // Bound to manifest.id at construction time - the Plugin never gets a
+    // chance to pass a different pluginId (4.4).
+    storage: createPluginStorage(manifest.id),
     logger: createLogger(manifest.id),
   }
 }

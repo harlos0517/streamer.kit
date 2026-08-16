@@ -1,4 +1,5 @@
 import type { Principal } from './permission.ts'
+import type { PluginStorage } from './storage.ts'
 import type { SendChatMessageParams } from './types/chat.ts'
 import type { PluginCommandDefinition } from './types/commands.ts'
 
@@ -32,8 +33,8 @@ export interface Logger {
   error(...args: unknown[]): void
 }
 
-// Deliberately excludes viewer/obs/actions/storage/database this round - see
-// the Part 3 plan for why (they each need Runtime capabilities that don't
+// Deliberately excludes viewer/obs/actions/database this round - see the
+// Part 3/4 plans for why (they each need Runtime capabilities that don't
 // exist yet without opening a backdoor around the plugin-sdk boundary).
 export interface PluginContext {
   plugin: {
@@ -49,5 +50,6 @@ export interface PluginContext {
   commands: CommandAPI
   chat: ChatAPI
   template: TemplateAPI
+  storage: PluginStorage
   logger: Logger
 }

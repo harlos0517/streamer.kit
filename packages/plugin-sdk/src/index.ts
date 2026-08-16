@@ -14,6 +14,7 @@ export type { PluginManifest } from './manifest.ts'
 export type { Plugin } from './plugin.ts'
 export type { Principal, PluginPermissions, PluginPrincipal } from './permission.ts'
 export { PermissionDeniedError } from './permission.ts'
+export type { PluginStorage } from './storage.ts'
 export type { SendChatMessageParams, SendPlatform } from './types/chat.ts'
 export type { PluginCommandDefinition } from './types/commands.ts'
 

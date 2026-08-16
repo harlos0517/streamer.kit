@@ -69,6 +69,20 @@ export const transactions = core.table('transactions', {
   index('transactions_currency_id_idx').on(table.currencyId),
 ])
 
+export const pluginStorage = core.table('plugin_storage', {
+  id: text('id').primaryKey().$defaultFn(() => createId()),
+  pluginId: text('plugin_id').notNull(),
+  key: text('key').notNull(),
+  value: jsonb('value'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+}, table => [
+  uniqueIndex('plugin_storage_plugin_id_key_key').on(table.pluginId, table.key),
+])
+
 export const viewersRelations = relations(viewers, ({ many }) => ({
   identities: many(identities),
   wallets: many(wallets),
@@ -99,3 +113,4 @@ export type Identity = typeof identities.$inferSelect
 export type Currency = typeof currencies.$inferSelect
 export type Wallet = typeof wallets.$inferSelect
 export type Transaction = typeof transactions.$inferSelect
+export type PluginStorageRow = typeof pluginStorage.$inferSelect

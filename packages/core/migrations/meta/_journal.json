@@ -8,6 +8,13 @@
       "when": 1786824105555,
       "tag": "0000_groovy_carlie_cooper",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786903353130,
+      "tag": "0001_charming_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }
