@@ -10,7 +10,9 @@ const CHAT_MESSAGE_CURRENCY_KEY = 'coin'
 const CHAT_MESSAGE_REWARD_AMOUNT = 10
 const PING_REPLY_TEMPLATE = '{{viewerName}} 呼叫了 !ping，pong 🏓'
 
-const runtime = createRuntime()
+const runtime = createRuntime({
+  bridgeActionName: process.env.STREAMERBOT_BRIDGE_ACTION_NAME,
+})
 
 // Every chat message earns currency - this isn't trigger-based, so it stays a
 // direct chat.message subscriber rather than going through the Commands Service.

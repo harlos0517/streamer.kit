@@ -1,5 +1,8 @@
+export type { BridgeOperation, BridgeOperationArgs } from './actions/bridge.ts'
+export { createBridgeCapability } from './actions/bridge.ts'
 export type { SendChatMessageParams } from './actions/chat.ts'
 export { createChatCapability } from './actions/chat.ts'
+export { createActionsCapability } from './actions/userActions.ts'
 export type {
   CommandDefinition,
   CommandTargetEventPayload,
@@ -11,7 +14,7 @@ export type { CoreEventMap } from './events/coreEventMap.ts'
 export type { ChatMessageEvent, Platform } from './events/normalize.ts'
 export { db } from './persistence/client.ts'
 export * from './persistence/schema.ts'
-export type { Runtime } from './runtime/runtime.ts'
+export type { Runtime, RuntimeOptions } from './runtime/runtime.ts'
 export { createRuntime } from './runtime/runtime.ts'
 export { ServiceRegistry } from './services/registry.ts'
 export { createTemplateService, renderTemplate } from './template/service.ts'

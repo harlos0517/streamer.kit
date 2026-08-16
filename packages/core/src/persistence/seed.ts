@@ -9,7 +9,7 @@ loadEnv({ path: resolve(__dirname, '../../../../.env') })
 const { db } = await import('./client.ts')
 const { currencies } = await import('./schema.ts')
 
-async function main() {
+const main = async() => {
   await db.insert(currencies)
     .values({ key: 'coin', name: 'Coin' })
     .onConflictDoNothing({ target: currencies.key })
