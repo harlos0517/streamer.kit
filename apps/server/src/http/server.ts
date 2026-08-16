@@ -2,7 +2,7 @@ import cors from '@fastify/cors'
 import { db } from '@streamer-kit/core'
 import Fastify from 'fastify'
 
-export function createHttpServer() {
+export const createHttpServer = () => {
   const app = Fastify({ logger: true })
 
   app.register(cors, { origin: true })

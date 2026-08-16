@@ -2,13 +2,13 @@ import type { Transaction } from '@streamer-kit/core'
 import { currencies, db, transactions, wallets } from '@streamer-kit/core'
 import { eq, sql } from 'drizzle-orm'
 
-export async function addCurrency(params: {
+export const addCurrency = async(params: {
   viewerId: string
   currencyKey: string
   amount: number
   reason: string
   source: string
-}): Promise<Transaction> {
+}): Promise<Transaction> => {
   const currency = await db.query.currencies.findFirst({
     where: eq(currencies.key, params.currencyKey),
   })

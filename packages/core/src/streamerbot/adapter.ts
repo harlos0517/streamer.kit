@@ -14,7 +14,7 @@ const RAW_EVENT_MAP: Record<string, StreamerbotEventName> = {
   // 'youtube.message': 'YouTube.Message',
 }
 
-export function createStreamerbotAdapter(bus: EventBus) {
+export const createStreamerbotAdapter = (bus: EventBus) => {
   const client = createStreamerbotClient()
 
   // Lazy by design: Streamer.bot exposes hundreds of possible event types

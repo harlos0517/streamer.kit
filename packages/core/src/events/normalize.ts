@@ -34,9 +34,9 @@ export type ChatMessageEvent = {
 //   user: YouTubeUser
 // }
 
-export function normalizeTwitchChatMessage(
+export const normalizeTwitchChatMessage = (
   payload: PayloadBase<TwitchChatMessageEventData>,
-): ChatMessageEvent {
+): ChatMessageEvent => {
   const { data } = payload
 
   return {
@@ -65,7 +65,7 @@ export function normalizeTwitchChatMessage(
 //   }
 // }
 
-export function registerNormalizers(bus: EventBus<CoreEventMap>): void {
+export const registerNormalizers = (bus: EventBus<CoreEventMap>): void => {
   bus.on('streamerbot.twitch.chatMessage', payload => {
     bus.emit('chat.message', normalizeTwitchChatMessage(payload))
   })

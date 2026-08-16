@@ -17,6 +17,14 @@ export interface CommandTriggeredEvent {
   args: string[]
 }
 
+// Shape of the payload emitted on a command's own targetEvent. Not part of
+// CoreEventMap since targetEvent is a runtime string, not a literal key -
+// consumers cast to this explicitly (see apps/server/src/main.ts).
+export interface CommandTargetEventPayload {
+  chatEvent: ChatMessageEvent
+  args: string[]
+}
+
 export class CommandsService {
   private commands = new Map<string, CommandDefinition>()
   private lastTriggeredAt = new Map<string, number>()
@@ -42,7 +50,8 @@ export class CommandsService {
       chatEvent: event,
       args,
     })
-    this.bus.emit(command.targetEvent, { chatEvent: event, args })
+    const targetPayload: CommandTargetEventPayload = { chatEvent: event, args }
+    this.bus.emit(command.targetEvent, targetPayload)
   }
 
   private match(token: string): CommandDefinition | undefined {
