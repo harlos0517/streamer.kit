@@ -1,5 +1,5 @@
 import cors from '@fastify/cors'
-import { prisma } from '@streamer-kit/database'
+import { db } from '@streamer-kit/core'
 import Fastify from 'fastify'
 
 export function createHttpServer() {
@@ -8,9 +8,9 @@ export function createHttpServer() {
   app.register(cors, { origin: true })
 
   app.get('/viewers', async() => {
-    const viewers = await prisma.viewer.findMany({
-      orderBy: { lastMessageAt: 'desc' },
-      include: { wallets: { include: { currency: true } } },
+    const viewers = await db.query.viewers.findMany({
+      orderBy: (viewers, { desc }) => [desc(viewers.lastMessageAt)],
+      with: { wallets: { with: { currency: true } } },
     })
 
     return viewers.map(viewer => ({

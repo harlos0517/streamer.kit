@@ -39,77 +39,215 @@
 
 - Streamer.bot 需要跟這個工具跑在**同一台機器**上。
 
+## 架構
+
+```text
+Twitch / YouTube / OBS / ...
+              │
+              ▼
+         Streamer.bot
+              │
+              ▼
+         Streamer.kit
+              │
+    ┌─────────┼──────────┐
+    ▼         ▼          ▼
+ Events    Services    Actions
+    │         │          │
+    └─────────┼──────────┘
+              ▼
+        Plugin Runtime
+              │
+      ┌───────┼────────┐
+      ▼       ▼        ▼
+   Currency  Check-in  ...
+```
+
+Streamer.kit Core 主要提供：
+
+* Viewer / Identity
+* Events
+* Commands
+* Service Registry
+* Actions / Streamer.bot Bridge
+* Plugin Runtime / SDK
+* Permission
+* Persistence
+
+實際直播功能則盡量以 Plugin 實作，例如：
+
+* Currency
+* Achievement
+* Check-in
+* Fishing
+* Gacha
+* Quest
+* Song Request
+
+官方 Plugin 與第三方 Plugin原則上使用相同的公開 SDK。
+
+## Repository
+
+```text
+apps/
+├── server/
+├── dashboard/
+└── overlay-host/
+
+packages/
+├── core/
+├── plugin-sdk/
+└── shared/
+
+plugins/
+├── currency/
+├── achievement/
+└── checkin/
+```
+
+`core` 是 Streamer.kit Runtime 本體。
+
+`plugin-sdk` 是官方與第三方 Plugin 使用的公開介面。
+
+`plugins` 則包含建立在 SDK 上的實際功能。
+
 ## Roadmap
-- 核心功能
-  - Viewer / Identity
-    - Viewer 作為平台無關的觀眾實體
-    - Twitch / YouTube / Discord Identity
-    - 帳號綁定 / 解綁 / 合併
-    - 顯示名稱、頭像、初見、上次留言
-    - 標籤 / 身分 / metadata
-  - 事件整合綁定 (含指令)
-    - 參數 mapping (同事件有不同參數)
-  - 動作整合綁定
-  - 貨幣系統
-    - 多貨幣
-    - 交易紀錄
-    - 增減/轉賬
-  - 成就
-  - Overlay System
-  - Dashboard
-    - 設定
-  - Plugin SDK
-    - permission
-  - Streamer.bot Integration Package
-    - Action/Command/Trigger Import
-- 頻道管理
-  - mod
-  - ban
-  - shoutout
-  - raid
-- 頻道互動
-  - 暱稱
-  - 頭香
-  - 經驗值
-  - 簽到
-  - 投票
-  - 降落偵測
-  - 斗內 (Twitch/YouTube/綠界/歐付寶等)
-  - 轉盤/抽卡
-  - 賭盤/拉霸機
-  - 加班
-  - 音樂/影片點播
-  - 點歌系統
-  - 釣魚
-  - AI 回覆
-  - 客製化留言板
-  - Live2D
-- Discord 串聯
-  - 身分組同步
-  - 聊天室/指令同步
-  - 個人檔案/成就/錢包查看
-- 其他
 
-### MVP (v0.1)
-- 觀眾留言偵測
-- 建立身分/觀眾
-- 更新初見/上次留言
-- 增加貨幣
-- 交易紀錄
-- 後臺使用者列表
+### Phase 1 — Events / Commands
 
-### v0.2
-- Viewer A (YouTube)
-- Viewer B (Twitch)
-- 透過 linking flow 合併為 Viewer C
-- Wallet / achievements / metadata 共用
-- 原始 identities 保留
-- 支援 unlink / merge correction
+* [ ] Streamer.bot Adapter
+* [ ] Viewer / Identity
+* [ ] Raw / Runtime Events
+* [ ] Event Bus / Registry
+* [ ] Commands Service
+* [ ] Command → Semantic Event
+* [ ] Service Registry 基礎
 
-### v0.3
-- Plugin SDK
-- permission
-- 簽到 Plugin
+目標：
+
+```text
+Chat
+→ Streamer.bot
+→ chat.message
+→ Command
+→ Semantic Event
+```
+
+### Phase 2 — Actions
+
+* [ ] Native Streamer.bot Requests
+* [ ] CPH Bridge
+* [ ] User-defined Action Bindings
+* [ ] Chat / OBS Capabilities
+* [ ] Template Service
+
+目標：
+
+```text
+Plugin
+→ Runtime Capability
+→ Native / Bridge / User Action
+→ Streamer.bot
+```
+
+### Phase 3 — Plugin SDK
+
+* [ ] Plugin Interface / Manifest
+* [ ] Plugin lifecycle
+* [ ] PluginContext
+* [ ] `BasePlugin` / `definePlugin()`
+* [ ] Events / Services / Commands / Actions API
+* [ ] Permission / Principal
+* [ ] Plugin dependency management
+
+目標：
+
+> Plugin 可以完全透過公開 SDK 使用 Runtime，不需要依賴 Core internals。
+
+### Phase 4 — Persistence / Bundled Plugins
+
+* [ ] Core Database
+* [ ] Plugin Storage
+* [ ] Scoped Plugin Database
+* [ ] Plugin migrations
+* [ ] Currency Plugin
+* [ ] Achievement Plugin
+
+目標：
+
+```text
+Plugin
+→ Service Registry
+→ Bundled Plugin
+→ Scoped Database
+```
+
+### Phase 5 — Check-in
+
+使用第一個完整功能驗證整套 Plugin architecture。
+
+* [ ] `official.checkin`
+* [ ] `!簽到`
+* [ ] Check-in Service
+* [ ] History / Streak
+* [ ] Currency rewards
+* [ ] Custom response template
+* [ ] Check-in Events
+
+完整流程：
+
+```text
+!簽到
+→ Command
+→ checkin.requested
+→ Check-in Service
+→ Plugin Database
+→ Currency Service
+→ checkin.completed
+→ Chat
+```
+
+如果 Check-in 無法只使用公開 SDK 完成，應修正 SDK，而不是使用 Runtime internal API。
+
+## Future
+
+Runtime foundation 穩定後，再逐步加入：
+
+* Dashboard
+* Overlay SDK
+* Fishing / Gacha / Quest
+* Song Request
+* Discord Integration
+* Identity Linking / Viewer Merge
+* Plugin Distribution / Updates
+* Plugin Sandbox
+
+## 技術
+
+* TypeScript
+* Node.js
+* pnpm
+* Fastify
+* PostgreSQL
+* Drizzle ORM
+* React
+* WebSocket
+* `@streamerbot/client`
+* Docker / Docker Compose
+
+## 核心原則
+
+> **保持 Core 小而穩定，讓功能透過 Plugin 持續擴充。**
+
+* Streamer.bot 是 Integration Host
+* Event 用於 publish / subscribe
+* Service 用於 request / response
+* Action 用於操作直播外部環境
+* Plugin 之間透過 Event / Service 溝通
+* Core owns Core data，Plugin owns Plugin data
+* 官方 Plugin 與第三方 Plugin 使用相同 SDK
+* 能做成 Plugin 的功能，優先做成 Plugin
+
 
 
 ## References

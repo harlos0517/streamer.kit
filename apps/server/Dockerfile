@@ -10,16 +10,13 @@ WORKDIR /app
 FROM base AS deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY apps/server/package.json apps/server/package.json
-COPY packages/database/package.json packages/database/package.json
+COPY packages/core/package.json packages/core/package.json
 RUN pnpm install --frozen-lockfile
 
-FROM deps AS build
-COPY packages/database packages/database
-COPY apps/server apps/server
-RUN pnpm --filter @streamer-kit/database exec prisma generate
-
-FROM build AS runtime
+FROM deps AS runtime
 ENV NODE_ENV=production
+COPY packages/core packages/core
+COPY apps/server apps/server
 WORKDIR /app/apps/server
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @streamer-kit/database exec prisma migrate deploy && pnpm --filter @streamer-kit/database run db:seed && pnpm run start"]
+CMD ["sh", "-c", "pnpm --filter @streamer-kit/core exec drizzle-kit migrate && pnpm --filter @streamer-kit/core run db:seed && pnpm run start"]

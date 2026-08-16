@@ -1,4 +1,6 @@
-import type { PayloadBase, TwitchChatMessageEventData } from '@/types/eventData.ts'
+import type { PayloadBase, TwitchChatMessageEventData } from '../types/eventData.ts'
+import type { EventBus } from './bus.ts'
+import type { CoreEventMap } from './coreEventMap.ts'
 
 export type Platform = 'twitch' // | 'youtube'
 
@@ -62,3 +64,13 @@ export function normalizeTwitchChatMessage(
 //     raw: payload,
 //   }
 // }
+
+export function registerNormalizers(bus: EventBus<CoreEventMap>): void {
+  bus.on('streamerbot.twitch.chatMessage', payload => {
+    bus.emit('chat.message', normalizeTwitchChatMessage(payload))
+  })
+
+  // bus.on('raw.streamerbot.youtube.message', payload => {
+  //   bus.emit('chat.message', normalizeYouTubeMessage(payload))
+  // })
+}

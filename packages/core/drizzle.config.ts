@@ -2,19 +2,18 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { config as loadEnv } from 'dotenv'
-import { defineConfig } from 'prisma/config'
+import { defineConfig } from 'drizzle-kit'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 loadEnv({ path: resolve(__dirname, '../../.env') })
 
-const databaseUrl = process.env.DATABASE_URL
-
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
-  migrations: {
-    path: 'prisma/migrations',
-    seed: 'tsx prisma/seed.ts',
+  dialect: 'postgresql',
+  schema: './src/persistence/schema.ts',
+  out: './migrations',
+  schemaFilter: ['core'],
+  dbCredentials: {
+    url: process.env.DATABASE_URL!,
   },
-  ...(databaseUrl ? { datasource: { url: databaseUrl } } : {}),
 })
