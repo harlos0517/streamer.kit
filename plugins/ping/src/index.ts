@@ -1,9 +1,13 @@
 import type { CommandTargetEventPayload } from '@streamer-kit/plugin-sdk'
-import { definePlugin } from '@streamer-kit/plugin-sdk'
+import { definePlugin, loadMigrations } from '@streamer-kit/plugin-sdk'
 
 import { pingLogColumns } from './schema.ts'
 
 const PING_REPLY_TEMPLATE = '{{viewerName}} 呼叫了 !ping，pong 🏓（第 {{count}} 次）'
+
+// Pre-generated via `drizzle-kit generate` (schema.ts) - Runtime applies
+// these automatically on install (4.9), never regenerates them.
+const migrations = loadMigrations(new URL('../migrations', import.meta.url))
 
 // Proves the Plugin mechanism end to end (Part 3): this package only depends
 // on @streamer-kit/plugin-sdk, never @streamer-kit/core.
@@ -22,6 +26,7 @@ export const pingPlugin = definePlugin({
       },
     ],
   },
+  migrations,
   setup(ctx) {
     const pingLog = ctx.database.table('ping_log', pingLogColumns)
 

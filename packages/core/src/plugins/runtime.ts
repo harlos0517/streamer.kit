@@ -3,6 +3,7 @@ import { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
 
 import type { Runtime } from '../runtime/runtime.ts'
 import { createPluginContext } from './context.ts'
+import { applyPluginMigrations } from './migrations.ts'
 
 export interface InstallPluginOptions {
   grantedPermissions?: string[] | undefined
@@ -23,6 +24,8 @@ export const installPlugin = async(
       + missingRequired.join(', '),
     )
   }
+
+  if (plugin.migrations) await applyPluginMigrations(plugin.manifest.id, plugin.migrations)
 
   const ctx = createPluginContext(plugin.manifest, runtime, granted)
 

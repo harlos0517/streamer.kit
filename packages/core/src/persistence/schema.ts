@@ -83,6 +83,16 @@ export const pluginStorage = core.table('plugin_storage', {
   uniqueIndex('plugin_storage_plugin_id_key_key').on(table.pluginId, table.key),
 ])
 
+export const pluginMigration = core.table('plugin_migration', {
+  id: text('id').primaryKey().$defaultFn(() => createId()),
+  pluginId: text('plugin_id').notNull(),
+  migrationName: text('migration_name').notNull(),
+  appliedAt: timestamp('applied_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [
+  uniqueIndex('plugin_migration_plugin_id_migration_name_key')
+    .on(table.pluginId, table.migrationName),
+])
+
 export const viewersRelations = relations(viewers, ({ many }) => ({
   identities: many(identities),
   wallets: many(wallets),
@@ -114,3 +124,4 @@ export type Currency = typeof currencies.$inferSelect
 export type Wallet = typeof wallets.$inferSelect
 export type Transaction = typeof transactions.$inferSelect
 export type PluginStorageRow = typeof pluginStorage.$inferSelect
+export type PluginMigrationRow = typeof pluginMigration.$inferSelect

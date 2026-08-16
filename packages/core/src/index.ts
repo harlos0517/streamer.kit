@@ -15,6 +15,7 @@ export type { InstallPluginOptions } from './plugins/runtime.ts'
 export { installPlugin } from './plugins/runtime.ts'
 export { createPluginStorage } from './plugins/storage.ts'
 export { createPluginDatabase, toPluginSchemaName } from './plugins/database.ts'
+export { applyPluginMigrations } from './plugins/migrations.ts'
 export { ServiceRegistry } from './services/registry.ts'
 export { createTemplateService, renderTemplate } from './template/service.ts'
 export { resolveViewer } from './viewer/resolve.ts'
@@ -26,5 +27,11 @@ export type {
   Platform,
 } from '@streamer-kit/shared'
 
-export type { Plugin, PluginContext, PluginManifest, Principal } from '@streamer-kit/plugin-sdk'
+export type {
+  Plugin,
+  PluginContext,
+  PluginManifest,
+  PluginMigration,
+  Principal,
+} from '@streamer-kit/plugin-sdk'
 export { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
