@@ -10,6 +10,7 @@ export const pingPlugin = definePlugin({
     id: 'demo.ping',
     name: 'Ping',
     version: '0.1.0',
+    permissions: { required: ['chat:send'] },
     commands: [
       {
         id: 'ping',

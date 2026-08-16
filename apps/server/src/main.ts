@@ -31,7 +31,7 @@ runtime.bus.on('chat.message', async event => {
   )
 })
 
-await installPlugin(pingPlugin, runtime)
+await installPlugin(pingPlugin, runtime, { grantedPermissions: ['chat:send'] })
 
 const httpApp = createHttpServer()
 const httpPort = Number(process.env.HTTP_PORT ?? 3000)

@@ -1,10 +1,30 @@
 import type { Plugin } from '@streamer-kit/plugin-sdk'
+import { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
 
 import type { Runtime } from '../runtime/runtime.ts'
 import { createPluginContext } from './context.ts'
 
-export const installPlugin = async(plugin: Plugin, runtime: Runtime): Promise<void> => {
-  const ctx = createPluginContext(plugin.manifest, runtime)
+export interface InstallPluginOptions {
+  grantedPermissions?: string[] | undefined
+}
+
+export const installPlugin = async(
+  plugin: Plugin,
+  runtime: Runtime,
+  options: InstallPluginOptions = {},
+): Promise<void> => {
+  const granted = new Set(options.grantedPermissions ?? [])
+  const missingRequired = (plugin.manifest.permissions?.required ?? [])
+    .filter(permission => !granted.has(permission))
+
+  if (missingRequired.length > 0) {
+    throw new PermissionDeniedError(
+      `Plugin "${plugin.manifest.id}" cannot start - missing required permissions: `
+      + missingRequired.join(', '),
+    )
+  }
+
+  const ctx = createPluginContext(plugin.manifest, runtime, granted)
 
   for (const command of plugin.manifest.commands ?? []) {
     runtime.commands.register({

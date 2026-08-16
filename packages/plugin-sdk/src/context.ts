@@ -1,3 +1,4 @@
+import type { Principal } from './permission.ts'
 import type { SendChatMessageParams } from './types/chat.ts'
 import type { PluginCommandDefinition } from './types/commands.ts'
 
@@ -39,6 +40,10 @@ export interface PluginContext {
     id: string
     version: string
   }
+  // Every call made through this ctx is implicitly on behalf of this
+  // principal (3.12) - the hook future Service-to-Service propagation will
+  // use once real inter-plugin services exist to thread it through.
+  principal: Principal
   events: EventAPI
   services: ServiceAPI
   commands: CommandAPI

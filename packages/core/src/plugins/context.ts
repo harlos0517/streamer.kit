@@ -1,11 +1,29 @@
 import type { PluginContext, PluginManifest } from '@streamer-kit/plugin-sdk'
+import { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
 
 import type { Runtime } from '../runtime/runtime.ts'
 import { createLogger } from './logger.ts'
 
-export const createPluginContext = (manifest: PluginManifest, runtime: Runtime): PluginContext => {
+export const createPluginContext = (
+  manifest: PluginManifest,
+  runtime: Runtime,
+  grantedPermissions: Set<string>,
+): PluginContext => {
+  // Authorization boundary lives here, not on the caller (3.11): checked on
+  // every call regardless of what the manifest declared as required/optional
+  // - manifest declarations only affect whether install() blocks (see
+  // plugins/runtime.ts), not what's actually enforced at call time.
+  const assertPermission = (permission: string): void => {
+    if (!grantedPermissions.has(permission)) {
+      throw new PermissionDeniedError(
+        `Plugin "${manifest.id}" is not authorized for "${permission}" (not granted).`,
+      )
+    }
+  }
+
   return {
     plugin: { id: manifest.id, version: manifest.version },
+    principal: { type: 'plugin', pluginId: manifest.id },
     events: {
       // EventAPI.on<T> is fully open (Plugin picks T); Core's real bus infers
       // listener type from the event name via CoreEventMap instead - the two
@@ -29,6 +47,7 @@ export const createPluginContext = (manifest: PluginManifest, runtime: Runtime):
       // Discard Streamer.bot's raw response shape - Plugins shouldn't see it
       // (2.1). chat.send already throws on failure.
       send: async params => {
+        assertPermission('chat:send')
         await runtime.chat.send(params)
       },
     },

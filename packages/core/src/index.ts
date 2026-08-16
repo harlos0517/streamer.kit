@@ -11,6 +11,7 @@ export { db } from './persistence/client.ts'
 export * from './persistence/schema.ts'
 export type { Runtime, RuntimeOptions } from './runtime/runtime.ts'
 export { createRuntime } from './runtime/runtime.ts'
+export type { InstallPluginOptions } from './plugins/runtime.ts'
 export { installPlugin } from './plugins/runtime.ts'
 export { ServiceRegistry } from './services/registry.ts'
 export { createTemplateService, renderTemplate } from './template/service.ts'
@@ -22,3 +23,6 @@ export type {
   CommandTriggeredEvent,
   Platform,
 } from '@streamer-kit/shared'
+
+export type { Plugin, PluginContext, PluginManifest, Principal } from '@streamer-kit/plugin-sdk'
+export { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
