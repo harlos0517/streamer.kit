@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1786824105555,
-      "tag": "0000_groovy_carlie_cooper",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1786903353130,
-      "tag": "0001_charming_lady_mastermind",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1786908628161,
-      "tag": "0002_tiresome_overlord",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1786911396449,
-      "tag": "0003_true_stingray",
+      "when": 1786957684628,
+      "tag": "0000_woozy_reaper",
       "breakpoints": true
     }
   ]
