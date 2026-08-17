@@ -39,6 +39,22 @@ export interface CurrencyService {
   }): Promise<{ debit: CurrencyTransaction, credit: CurrencyTransaction }>
 }
 
+// Idempotent default-data bootstrap, run from setup() before the service is
+// registered - replaces the old standalone seed.ts script, which opened its
+// own drizzle connection outside the Runtime/ctx.database boundary and had
+// to run as a separate pre-boot deploy step (ordering problem: it depended
+// on the plugin's schema already existing, but schema creation itself is
+// handled by installPlugin()'s automatic migration - see 4.9). Doing it here
+// instead means schema creation and default-data creation happen in the same
+// install step, in the right order, with no external orchestration needed.
+export const ensureCurrency = async(
+  database: DatabaseAPI, key: string, name: string,
+): Promise<void> => {
+  const currencyTable = database.table('currency', currencyColumns)
+  const existing = await database.select(currencyTable, eq(currencyTable.key, key))
+  if (existing.length === 0) await database.insert(currencyTable, { key, name })
+}
+
 export const createCurrencyService = (database: DatabaseAPI, events: EventAPI): CurrencyService => {
   const currencyTable = database.table('currency', currencyColumns)
   const transactionTable = database.table('transaction', transactionColumns)
