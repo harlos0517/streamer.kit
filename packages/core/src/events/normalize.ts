@@ -64,6 +64,14 @@ export const normalizeTwitchChatMessage = async(
 
 export const registerNormalizers = (bus: EventBus<CoreEventMap>): void => {
   bus.on('streamerbot.twitch.chatMessage', async payload => {
+    // Streamer.bot flags its own sent messages (e.g. ctx.chat.send()'s
+    // replies looping back through chat, common on a self-bot Twitch setup)
+    // with meta.internal: true - confirmed live by comparing a runtime.chat.
+    // send() message against a real user message. Skip these before they
+    // ever reach chat.message, or every Plugin reply would itself trigger
+    // the currency reward / Commands Service / another Plugin reply.
+    if (payload.data.meta.internal) return
+
     bus.emit('chat.message', await normalizeTwitchChatMessage(payload))
   })
 
