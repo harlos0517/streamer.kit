@@ -1,10 +1,8 @@
-import { db } from '@streamer-kit/plugin-sdk'
+import { db, toPluginSchemaName } from '@streamer-kit/plugin-sdk'
 import { pgSchema } from 'drizzle-orm/pg-core'
 
-// Column shape shared between this file (drizzle-kit migration generation,
-// hardcoded schema name below) and setup()'s ctx.database.table() call
-// (Runtime-resolved schema name from manifest.id via toPluginSchemaName).
-// Both must resolve to the same physical schema - 'demo.ping' -> 'plugin_demo_ping'.
+import { PLUGIN_ID } from './pluginId.ts'
+
 export const pingLogColumns = {
   id: db.id(),
   platformDisplayName: db.string(),
@@ -15,5 +13,9 @@ export const pingLogColumns = {
 // drizzle-kit only - never imported by setup()/runtime code, which gets its
 // table handle from ctx.database.table() instead. Must be exported (not just
 // the table built from it) or drizzle-kit won't emit CREATE SCHEMA.
-export const migrationSchema = pgSchema('plugin_demo_ping')
+//
+// Derived through the same toPluginSchemaName() Runtime uses to resolve
+// ctx.database.table(), instead of a hand-typed string (see
+// plugins/currency/src/schema.ts for why this matters).
+export const migrationSchema = pgSchema(toPluginSchemaName(PLUGIN_ID))
 export const pingLog = migrationSchema.table('ping_log', pingLogColumns)

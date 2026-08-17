@@ -11,12 +11,20 @@ FROM base AS deps
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY apps/server/package.json apps/server/package.json
 COPY packages/core/package.json packages/core/package.json
+COPY packages/plugin-sdk/package.json packages/plugin-sdk/package.json
+COPY packages/shared/package.json packages/shared/package.json
+COPY plugins/ping/package.json plugins/ping/package.json
+COPY plugins/currency/package.json plugins/currency/package.json
 RUN pnpm install --frozen-lockfile
 
 FROM deps AS runtime
 ENV NODE_ENV=production
 COPY packages/core packages/core
+COPY packages/plugin-sdk packages/plugin-sdk
+COPY packages/shared packages/shared
+COPY plugins/ping plugins/ping
+COPY plugins/currency plugins/currency
 COPY apps/server apps/server
 WORKDIR /app/apps/server
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @streamer-kit/core exec drizzle-kit migrate && pnpm --filter @streamer-kit/core run db:seed && pnpm run start"]
+CMD ["sh", "-c", "pnpm --filter @streamer-kit/core exec drizzle-kit migrate && pnpm --filter @streamer-kit/plugin-currency exec drizzle-kit migrate && pnpm --filter @streamer-kit/plugin-currency run db:seed && pnpm run start"]

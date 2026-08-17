@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
-import { index, integer, jsonb, pgSchema, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, jsonb, pgSchema, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const core = pgSchema('core')
 
@@ -35,40 +35,6 @@ export const identities = core.table('identities', {
   index('identities_viewer_id_idx').on(table.viewerId),
 ])
 
-export const currencies = core.table('currencies', {
-  id: text('id').primaryKey().$defaultFn(() => createId()),
-  key: text('key').notNull().unique(),
-  name: text('name').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-})
-
-export const wallets = core.table('wallets', {
-  id: text('id').primaryKey().$defaultFn(() => createId()),
-  balance: integer('balance').notNull().default(0),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-  viewerId: text('viewer_id').notNull().references(() => viewers.id),
-  currencyId: text('currency_id').notNull().references(() => currencies.id),
-}, table => [
-  uniqueIndex('wallets_viewer_id_currency_id_key').on(table.viewerId, table.currencyId),
-])
-
-export const transactions = core.table('transactions', {
-  id: text('id').primaryKey().$defaultFn(() => createId()),
-  amount: integer('amount').notNull(),
-  reason: text('reason').notNull(),
-  source: text('source'),
-  metadata: jsonb('metadata'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  viewerId: text('viewer_id').notNull().references(() => viewers.id),
-  currencyId: text('currency_id').notNull().references(() => currencies.id),
-}, table => [
-  index('transactions_viewer_id_idx').on(table.viewerId),
-  index('transactions_currency_id_idx').on(table.currencyId),
-])
-
 export const pluginStorage = core.table('plugin_storage', {
   id: text('id').primaryKey().$defaultFn(() => createId()),
   pluginId: text('plugin_id').notNull(),
@@ -95,33 +61,13 @@ export const pluginMigration = core.table('plugin_migration', {
 
 export const viewersRelations = relations(viewers, ({ many }) => ({
   identities: many(identities),
-  wallets: many(wallets),
-  transactions: many(transactions),
 }))
 
 export const identitiesRelations = relations(identities, ({ one }) => ({
   viewer: one(viewers, { fields: [identities.viewerId], references: [viewers.id] }),
 }))
 
-export const currenciesRelations = relations(currencies, ({ many }) => ({
-  wallets: many(wallets),
-  transactions: many(transactions),
-}))
-
-export const walletsRelations = relations(wallets, ({ one }) => ({
-  viewer: one(viewers, { fields: [wallets.viewerId], references: [viewers.id] }),
-  currency: one(currencies, { fields: [wallets.currencyId], references: [currencies.id] }),
-}))
-
-export const transactionsRelations = relations(transactions, ({ one }) => ({
-  viewer: one(viewers, { fields: [transactions.viewerId], references: [viewers.id] }),
-  currency: one(currencies, { fields: [transactions.currencyId], references: [currencies.id] }),
-}))
-
 export type Viewer = typeof viewers.$inferSelect
 export type Identity = typeof identities.$inferSelect
-export type Currency = typeof currencies.$inferSelect
-export type Wallet = typeof wallets.$inferSelect
-export type Transaction = typeof transactions.$inferSelect
 export type PluginStorageRow = typeof pluginStorage.$inferSelect
 export type PluginMigrationRow = typeof pluginMigration.$inferSelect

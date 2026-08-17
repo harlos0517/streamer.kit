@@ -1,6 +1,7 @@
 import type { CommandTargetEventPayload } from '@streamer-kit/plugin-sdk'
 import { definePlugin, loadMigrations } from '@streamer-kit/plugin-sdk'
 
+import { PLUGIN_ID } from './pluginId.ts'
 import { pingLogColumns } from './schema.ts'
 
 const PING_REPLY_TEMPLATE = '{{viewerName}} 呼叫了 !ping，pong 🏓（第 {{count}} 次）'
@@ -13,7 +14,7 @@ const migrations = loadMigrations(new URL('../migrations', import.meta.url))
 // on @streamer-kit/plugin-sdk, never @streamer-kit/core.
 export const pingPlugin = definePlugin({
   manifest: {
-    id: 'demo.ping',
+    id: PLUGIN_ID,
     name: 'Ping',
     version: '0.1.0',
     permissions: { required: ['chat:send'] },

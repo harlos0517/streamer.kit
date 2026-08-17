@@ -19,8 +19,8 @@ export interface DatabaseAPI {
     columns: BuildColumns<TName, TColumns, 'pg'>
     dialect: 'pg'
   }>
-  select<T extends AnyPluginTable>(table: T): Promise<T['$inferSelect'][]>
-  insert<T extends AnyPluginTable>(table: T, values: T['$inferInsert']): Promise<void>
+  select<T extends AnyPluginTable>(table: T, where?: SQL): Promise<T['$inferSelect'][]>
+  insert<T extends AnyPluginTable>(table: T, values: T['$inferInsert']): Promise<T['$inferSelect']>
   update<T extends AnyPluginTable>(
     table: T,
     values: Partial<T['$inferInsert']>,

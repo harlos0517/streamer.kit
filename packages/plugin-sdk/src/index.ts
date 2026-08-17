@@ -10,6 +10,7 @@ export type {
 } from './context.ts'
 export type { AnyPluginTable, DatabaseAPI } from './database/api.ts'
 export { db } from './database/columns.ts'
+export { toPluginSchemaName } from './database/schemaName.ts'
 export type { PluginDefinition } from './definePlugin.ts'
 export { definePlugin } from './definePlugin.ts'
 export type { PluginManifest } from './manifest.ts'
