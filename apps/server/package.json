@@ -11,6 +11,7 @@
   "dependencies": {
     "@fastify/cors": "^11.3.0",
     "@streamer-kit/core": "workspace:*",
+    "@streamer-kit/plugin-checkin": "workspace:*",
     "@streamer-kit/plugin-currency": "workspace:*",
     "@streamer-kit/plugin-ping": "workspace:*",
     "dotenv": "^17.2.3",

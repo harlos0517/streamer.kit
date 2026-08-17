@@ -2,6 +2,7 @@ import type { PluginContext, PluginManifest } from '@streamer-kit/plugin-sdk'
 import { PermissionDeniedError } from '@streamer-kit/plugin-sdk'
 
 import type { Runtime } from '../runtime/runtime.ts'
+import { getViewer } from '../viewer/resolve.ts'
 import { createPluginDatabase } from './database.ts'
 import { createLogger } from './logger.ts'
 import { createPluginStorage } from './storage.ts'
@@ -51,6 +52,12 @@ export const createPluginContext = (
       send: async params => {
         assertPermission('chat:send')
         await runtime.chat.send(params)
+      },
+    },
+    viewer: {
+      get: async viewerId => {
+        assertPermission('viewer:read')
+        return getViewer(viewerId)
       },
     },
     template: {

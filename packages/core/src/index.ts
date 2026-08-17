@@ -18,7 +18,6 @@ export { createPluginDatabase, toPluginSchemaName } from './plugins/database.ts'
 export { applyPluginMigrations } from './plugins/migrations.ts'
 export { ServiceRegistry } from './services/registry.ts'
 export { createTemplateService, renderTemplate } from './template/service.ts'
-export { resolveViewer } from './viewer/resolve.ts'
 
 export type {
   ChatMessageEvent,

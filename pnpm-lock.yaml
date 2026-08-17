@@ -256,6 +256,9 @@ importers:
       '@streamer-kit/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@streamer-kit/plugin-checkin':
+        specifier: workspace:*
+        version: link:../../plugins/checkin
       '@streamer-kit/plugin-currency':
         specifier: workspace:*
         version: link:../../plugins/currency
@@ -323,6 +326,25 @@ importers:
         version: 0.45.2(@electric-sql/pglite@0.4.3)(@prisma/client@7.9.1(prisma@7.9.1(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))(typescript@6.0.3))(@types/pg@8.21.0)(mysql2@3.15.3)(pg@8.23.0)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))
 
   packages/shared: {}
+
+  plugins/checkin:
+    dependencies:
+      '@streamer-kit/plugin-sdk':
+        specifier: workspace:*
+        version: link:../../packages/plugin-sdk
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(@electric-sql/pglite@0.4.3)(@prisma/client@7.9.1(prisma@7.9.1(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))(typescript@6.0.3))(@types/pg@8.21.0)(mysql2@3.15.3)(pg@8.23.0)(postgres@3.4.7)(prisma@7.9.1(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))
+    devDependencies:
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.4.2
+      drizzle-kit:
+        specifier: ^0.31.10
+        version: 0.31.10
+      tsx:
+        specifier: ^4.20.6
+        version: 4.23.12
 
   plugins/currency:
     dependencies:

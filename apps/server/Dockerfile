@@ -15,6 +15,7 @@ COPY packages/plugin-sdk/package.json packages/plugin-sdk/package.json
 COPY packages/shared/package.json packages/shared/package.json
 COPY plugins/ping/package.json plugins/ping/package.json
 COPY plugins/currency/package.json plugins/currency/package.json
+COPY plugins/checkin/package.json plugins/checkin/package.json
 RUN pnpm install --frozen-lockfile
 
 FROM deps AS runtime
@@ -24,6 +25,7 @@ COPY packages/plugin-sdk packages/plugin-sdk
 COPY packages/shared packages/shared
 COPY plugins/ping plugins/ping
 COPY plugins/currency plugins/currency
+COPY plugins/checkin plugins/checkin
 COPY apps/server apps/server
 WORKDIR /app/apps/server
 EXPOSE 3000

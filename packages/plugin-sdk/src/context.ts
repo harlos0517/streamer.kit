@@ -3,6 +3,7 @@ import type { Principal } from './permission.ts'
 import type { PluginStorage } from './storage.ts'
 import type { SendChatMessageParams } from './types/chat.ts'
 import type { PluginCommandDefinition } from './types/commands.ts'
+import type { ViewerSummary } from './types/viewer.ts'
 
 // Structurally compatible with Core's real EventBus/ServiceRegistry, but
 // declared independently - plugin-sdk never imports from @streamer-kit/core.
@@ -24,6 +25,15 @@ export interface ChatAPI {
   send(params: SendChatMessageParams): Promise<void>
 }
 
+export interface ViewerAPI {
+  // Re-fetches a previously-obtained viewerId - needs viewer:read. Returns
+  // undefined if the viewer no longer exists (4.8). Resolving *from* a chat
+  // event isn't a Plugin capability - chatEvent.viewerId is already resolved
+  // by Runtime at normalization time (1.4), before chat.message reaches the
+  // Event Bus, so every Plugin already has it with no permission needed.
+  get(viewerId: string): Promise<ViewerSummary | undefined>
+}
+
 export interface TemplateAPI {
   render(template: string, data: Record<string, unknown>): string
 }
@@ -34,9 +44,10 @@ export interface Logger {
   error(...args: unknown[]): void
 }
 
-// Deliberately excludes viewer/obs/actions this round - see the Part 3/4
-// plans for why (they each need Runtime capabilities that don't exist yet
-// without opening a backdoor around the plugin-sdk boundary).
+// Deliberately excludes obs/actions this round - see the Part 3/4 plans for
+// why (they each need Runtime capabilities that don't exist yet without
+// opening a backdoor around the plugin-sdk boundary). viewer was excluded
+// for the same reason until Part 5 (Check-in) needed it - see ViewerAPI.
 export interface PluginContext {
   plugin: {
     id: string
@@ -50,6 +61,7 @@ export interface PluginContext {
   services: ServiceAPI
   commands: CommandAPI
   chat: ChatAPI
+  viewer: ViewerAPI
   template: TemplateAPI
   storage: PluginStorage
   database: DatabaseAPI

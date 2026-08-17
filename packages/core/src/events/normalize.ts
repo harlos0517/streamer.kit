@@ -1,6 +1,7 @@
 import type { ChatMessageEvent } from '@streamer-kit/shared'
 
 import type { PayloadBase, TwitchChatMessageEventData } from '../types/eventData.ts'
+import { resolveViewer } from '../viewer/resolve.ts'
 import type { EventBus } from './bus.ts'
 import type { CoreEventMap } from './coreEventMap.ts'
 
@@ -24,18 +25,24 @@ import type { CoreEventMap } from './coreEventMap.ts'
 //   user: YouTubeUser
 // }
 
-export const normalizeTwitchChatMessage = (
+export const normalizeTwitchChatMessage = async(
   payload: PayloadBase<TwitchChatMessageEventData>,
-): ChatMessageEvent => {
+): Promise<ChatMessageEvent> => {
   const { data } = payload
+
+  const base = {
+    platform: 'twitch' as const,
+    platformUserId: data.user.id,
+    platformDisplayName: data.user.name,
+    timestamp: payload.timeStamp,
+  }
+  const viewer = await resolveViewer(base)
 
   return {
     type: 'chat.message',
-    platform: 'twitch',
-    platformUserId: data.user.id,
-    platformDisplayName: data.user.name,
+    ...base,
+    viewerId: viewer.id,
     message: data.text,
-    timestamp: payload.timeStamp,
     raw: payload,
   }
 }
@@ -56,8 +63,8 @@ export const normalizeTwitchChatMessage = (
 // }
 
 export const registerNormalizers = (bus: EventBus<CoreEventMap>): void => {
-  bus.on('streamerbot.twitch.chatMessage', payload => {
-    bus.emit('chat.message', normalizeTwitchChatMessage(payload))
+  bus.on('streamerbot.twitch.chatMessage', async payload => {
+    bus.emit('chat.message', await normalizeTwitchChatMessage(payload))
   })
 
   // bus.on('streamerbot.youtube.message', payload => {

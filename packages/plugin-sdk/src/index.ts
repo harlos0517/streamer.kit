@@ -7,6 +7,7 @@ export type {
   PluginContext,
   ServiceAPI,
   TemplateAPI,
+  ViewerAPI,
 } from './context.ts'
 export type { AnyPluginTable, DatabaseAPI } from './database/api.ts'
 export { db } from './database/columns.ts'
@@ -22,6 +23,7 @@ export { PermissionDeniedError } from './permission.ts'
 export type { PluginStorage } from './storage.ts'
 export type { SendChatMessageParams, SendPlatform } from './types/chat.ts'
 export type { PluginCommandDefinition } from './types/commands.ts'
+export type { ViewerSummary } from './types/viewer.ts'
 
 // Re-exported so plugin authors only need one import source (0.4).
 export type {

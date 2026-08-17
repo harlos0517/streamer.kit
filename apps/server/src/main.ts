@@ -1,6 +1,7 @@
 import './env.ts'
 
-import { createRuntime, installPlugin, resolveViewer } from '@streamer-kit/core'
+import { createRuntime, installPlugin } from '@streamer-kit/core'
+import { checkinPlugin } from '@streamer-kit/plugin-checkin'
 import type { CurrencyService } from '@streamer-kit/plugin-currency'
 import { currencyPlugin } from '@streamer-kit/plugin-currency'
 import { pingPlugin } from '@streamer-kit/plugin-ping'
@@ -21,9 +22,8 @@ const currencyService = runtime.services.get<CurrencyService>('currency')
 // direct chat.message subscriber rather than going through the Commands Service.
 // Listener type is inferred from CoreEventMap['chat.message'] - no cast needed.
 runtime.bus.on('chat.message', async event => {
-  const viewer = await resolveViewer(event)
   const transaction = await currencyService.add({
-    viewerId: viewer.id,
+    viewerId: event.viewerId,
     currencyKey: CHAT_MESSAGE_CURRENCY_KEY,
     amount: CHAT_MESSAGE_REWARD_AMOUNT,
     reason: 'chat.message',
@@ -31,9 +31,13 @@ runtime.bus.on('chat.message', async event => {
   })
   console.log(
     '[chat.message]', event.platform, event.platformDisplayName, event.message,
-    '-> viewer', viewer.id, `+${transaction.amount} ${CHAT_MESSAGE_CURRENCY_KEY}`,
+    '-> viewer', event.viewerId, `+${transaction.amount} ${CHAT_MESSAGE_CURRENCY_KEY}`,
   )
 })
+
+// Must install after currencyPlugin - setup() calls ctx.services.get('currency')
+// synchronously and throws immediately if it isn't registered yet (5.4).
+await installPlugin(checkinPlugin, runtime, { grantedPermissions: ['chat:send'] })
 
 await installPlugin(pingPlugin, runtime, { grantedPermissions: ['chat:send'] })
 
