@@ -27,4 +27,9 @@ COPY plugins/currency plugins/currency
 COPY apps/server apps/server
 WORKDIR /app/apps/server
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @streamer-kit/core exec drizzle-kit migrate && pnpm --filter @streamer-kit/plugin-currency exec drizzle-kit migrate && pnpm --filter @streamer-kit/plugin-currency run db:seed && pnpm run start"]
+# Only core's schema needs drizzle-kit migrate here - it must exist before
+# boot since it holds core.plugin_migration, the table installPlugin() reads
+# to apply each plugin's own migrations automatically (4.9). Running
+# drizzle-kit migrate for a plugin here too would race installPlugin's own
+# migration application and fail on "already exists".
+CMD ["sh", "-c", "pnpm --filter @streamer-kit/core exec drizzle-kit migrate && pnpm run start"]
